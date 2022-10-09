@@ -64,22 +64,22 @@ const listSchema = {
   items: [itemSchema]
 };
 const List = mongoose.model("List", listSchema);
-
+// const list = new List({
+//   name: category,
+//   items: defaultItems
+// });
+// list.save();
+// res.redirect("/category/"+category);
 app.get("/category/:anyTopic", function(req, res) {
   const category = req.params.anyTopic;
   List.findOne({name: category}, function(err, foundList) {
     if (!err) {
       if (!foundList) {
-        // const list = new List({
-        //   name: category,
-        //   items: defaultItems
-        // });
-        // list.save();
-        // res.redirect("/category/"+category);
+
         console.log("item does'nt exist");
       } else {
         // res.render("index",{title:foundList.name,presentItems:foundList.items});
-        console.log("exists");
+        console.log("item exists");
       }
     }
   });
