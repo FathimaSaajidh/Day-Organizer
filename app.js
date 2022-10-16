@@ -19,33 +19,31 @@ const itemSchema = new mongoose.Schema({
 const ToDoItem = mongoose.model("ToDoItem", itemSchema);
 
 const item1 = new ToDoItem({
-  activity: "Welcome to your todo List"
+  activity: "Welcome"
 });
 const item2 = new ToDoItem({
-  activity: "set your aim and work to get through."
+  activity: "note down your todos."
 })
 const defaultItems = [item1, item2];
 
 
 app.get("/", function(req, res) {
   const date = new Date();
-  // const day = date.getDay();
-  // res.send(day+"");
   let options = {
     weekday: "long",
     day: "numeric",
     month: "long"
   };
   var day = date.toLocaleDateString("en-US", options);
-  // res.render("index",{currentDay: day});
 
   ToDoItem.find({}, function(err, foundItems) {
     if (foundItems.length !== 0) {
       res.render("index", {
         currentDay: day,
-        presentItems: foundItems,
-        title: "Hey!"
+        presentItems: foundItems
       });
+
+
     } else {
       ToDoItem.insertMany(defaultItems, function(err) {
         if (err) {
@@ -70,20 +68,19 @@ const List = mongoose.model("List", listSchema);
 // });
 // list.save();
 // res.redirect("/category/"+category);
-app.get("/category/:anyTopic", function(req, res) {
-  const category = req.params.anyTopic;
-  List.findOne({name: category}, function(err, foundList) {
-    if (!err) {
-      if (!foundList) {
-
-        console.log("item does'nt exist");
-      } else {
-        // res.render("index",{title:foundList.name,presentItems:foundList.items});
-        console.log("item exists");
-      }
-    }
-  });
-});
+// app.get("/category/:anyTopic", function(req, res) {
+//   const category = req.params.anyTopic;
+//   List.findOne({name: category}, function(err, foundList) {
+//     if (!err) {
+//       if (!foundList) {
+//         const customList =
+//       } else {
+//         // res.render("index",{title:foundList.name,presentItems:foundList.items});
+//         console.log("item exists");
+//       }
+//     }
+//   });
+// });
 
 app.post("/", function(req, res) {
   const newActivity = req.body.newItem;
