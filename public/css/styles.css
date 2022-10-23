@@ -86,9 +86,12 @@ input[type="text"]:focus {
 }
 input[type="checkbox"] {
   margin: 10px;
-  background-color:#E9DAC1; 
+  background-color:#E9DAC1;
 }
 input:checked+p {
   text-decoration: line-through;
   text-decoration-color: #2B4865;
+}
+.active{
+  background-color: green !important;
 }
