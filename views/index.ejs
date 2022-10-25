@@ -6,7 +6,7 @@
 
   <!-- heading -->
   <div class="box" id="heading">
-    <h1>todo</h1>
+    <h1><%=listTitle%></h1>
   </div>
 
   <!-- items     -->
@@ -19,14 +19,15 @@
         <input type="checkbox" name="check" value="<%=item._id %>" onChange="this.form.submit()">
         <p> <%= item.activity %> </p>
       </div>
+      <input type="hidden" name="custlistName" value="<%= listTitle %>"></input>
     </form>
     <% }); %>
 
 
     <form class="item" action="/" method="post">
       <input type="text" name="newItem" value="" placeholder="New Item" autocomplete="off">
-  
-      <button type="submit" name="button">+</button>
+
+      <button type="submit" name="list" value="<%=listTitle%>">+</button>
     </form>
 
   </div>

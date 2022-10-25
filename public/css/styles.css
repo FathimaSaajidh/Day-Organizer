@@ -7,17 +7,17 @@ body{
   background: white;
   border-radius: 5px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
-background-color: #F7ECDE;
+background-color: #CFD2CF;
 }
 #heading{
   text-align: center;
- color:#1D5C63;
+  color:#1D5C63;
 }
 .item{
   min-height: 70px;
   align-items: center;
   display: flex;
-  border-bottom: 1px solid #E9DAC1;
+  border-bottom: 1px solid #CFD2CF;
 }
 
 .item:last-child{
@@ -53,14 +53,14 @@ button{
   border-radius: 50%;
   border-color: transparent;
   background-color: #3fdc98;
-  color: #F7ECDE;
+  color: #CFD2CF;
   font-size:30px;
   padding-bottom: 6px;
   border-width:0;
 }
 
 .content{
-  padding-top: 20px;
+  padding-top: 30px;
 }
 .nav-item{
   padding: 20px;
@@ -86,7 +86,15 @@ input[type="text"]:focus {
 }
 input[type="checkbox"] {
   margin: 10px;
-  background-color:#E9DAC1;
+background:rgba(207, 210, 207, 1);
+-moz-appearance: none;
+
+  /*   color:black;
+-webkit-appearance: none;
+  appearance: none;
+
+    border: black; */
+    /* position: relative; */
 }
 input:checked+p {
   text-decoration: line-through;
@@ -94,4 +102,12 @@ input:checked+p {
 }
 .active{
   background-color: green !important;
+}
+.helpContnt{
+  width:80%;
+  height: 80%;
+  background-color: #CFD2CF;
+padding:50px 30px 30px;
+margin: 50px auto 30px;
+opacity:0.7;
 }
