@@ -78,7 +78,7 @@ app.get("/", function(req,res){
         res.redirect("/");
       }else{
         res.render("index",{
-          listTitle:"ToDo",
+          listTitle:"todo",
           currentDay: today,
           presentItems:foundItems
         });
@@ -122,7 +122,7 @@ app.post("/", function(req, res) {
     activity: newActivity
   });
 
-if(listName === "ToDo"){
+if(listName === "todo"){
   nextActivity.save();
   console.log("item saved to db");
   res.redirect("/");
