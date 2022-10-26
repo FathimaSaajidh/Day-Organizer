@@ -3,8 +3,7 @@ const bodyParser = require("body-parser");
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const app = express();
-const $ = require("jquery");
-const content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt vitae semper quis lectus nulla at volutpat diam ut. Eget velit aliquet sagittis id consectetur purus. Leo in vitae turpis massa sed elementum tempus egestas. In metus vulputate eu scelerisque felis imperdiet. Dis parturient montes nascetur ridiculus mus mauris vitae. Tincidunt tortor aliquam nulla facilisi cras fermentum odio. Eget nunc scelerisque viverra mauris in aliquam sem fringilla ut. Suspendisse ultrices gravida dictum fusce ut placerat orci nulla. Quis blandit turpis cursus in hac habitasse platea dictumst quisque. Nunc congue nisi vitae suscipit tellus mauris a diam. Sit amet justo donec enim."
+// const $ = require("jquery");
 
 app.set('view engine', 'ejs');
 
@@ -59,29 +58,48 @@ const today = date.toLocaleDateString("en-US", options);
 
 app.get("/",function(req, res) {
   ToDoItem.find({}, function(err, itemsFound) {
-    if (!err) {
-      if (itemsFound.length !== 0) {
-        res.render("index", {
-          currentDay: today,
-          listTitle: "todo",
-          presentItems: itemsFound
-        });
-      } else {
-        ToDoItem.insertMany(defaultItems, function(err) {
-          if (!err) {
-            console.log("item inserted to db's todoitems collection");
-          }else{
-            console.log(err.message);
-          }
-        });
-        res.redirect("/");
+    if (itemsFound.length === 0){
+      ToDoItem.insertMany(defaultItems, function(err){
+      if(err){
+        console.log(err.message);
+      } else{
+        console.log("item inserted to db's todoitems collection");
       }
-    }else{
-      console.log(err.message);
-    }
+    });
+    res.redirect("/");
+  }else{
+    res.render("index", {
+      currentDay: today,
+      listTitle: "todo",
+      presentItems: itemsFound
+    });
+  }
   });
 });
 
+
+//       if (itemsFound.length === 0) {
+//         res.render("index", {
+//           currentDay: today,
+//           listTitle: "todo",
+//           presentItems: itemsFound
+//         });
+//       } else {
+//         ToDoItem.insertMany(defaultItems, function(err) {
+//           if (!err) {
+//             console.log("item inserted to db's todoitems collection");
+//           }else{
+//             console.log(err.message);
+//           }
+//         });
+//         res.redirect("/");
+//       }
+//     }else{
+//       console.log(err.message);
+//     }
+//   });
+// });
+//
 
 
 app.post("/", function(req, res) {
