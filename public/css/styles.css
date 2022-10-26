@@ -12,6 +12,7 @@ background-color: #CFD2CF;
 #heading{
   text-align: center;
   color:#1D5C63;
+  font-family: cursive;
 }
 .item{
   min-height: 70px;
@@ -29,6 +30,7 @@ p{
   padding:20px;
   font-size:20px;
   font-weight: 200;
+  font-family: cursive;
   color:#2B4865;
 }
 
@@ -66,9 +68,10 @@ button{
   padding: 20px;
 }
 .waterMark{
-  opacity:0.3;
+  opacity:0.4;
   text-align: center;
   font-size: 4rem;
+  color: #CFD2CF;
 }
 input[type="text"] {
   text-align: center;
@@ -110,4 +113,18 @@ input:checked+p {
 padding:50px 30px 30px;
 margin: 50px auto 30px;
 opacity:0.7;
+}
+.helpHead{
+  margin-top: 40px;
+  text-align: center;
+  color: #CFD2CF;
+  font-family: cursive;
+}
+ul{
+  list-style-type: circle;
+}
+li{
+  padding:5px 0;
+  font-size:1.15rem;
+  font-family: cursive;
 }

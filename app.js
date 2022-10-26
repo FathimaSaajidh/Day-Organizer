@@ -4,7 +4,7 @@ const _ = require("lodash");
 const mongoose = require("mongoose");
 const app = express();
 const $ = require("jquery");
-const content= "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt vitae semper quis lectus nulla at volutpat diam ut. Eget velit aliquet sagittis id consectetur purus. Leo in vitae turpis massa sed elementum tempus egestas. In metus vulputate eu scelerisque felis imperdiet. Dis parturient montes nascetur ridiculus mus mauris vitae. Tincidunt tortor aliquam nulla facilisi cras fermentum odio. Eget nunc scelerisque viverra mauris in aliquam sem fringilla ut. Suspendisse ultrices gravida dictum fusce ut placerat orci nulla. Quis blandit turpis cursus in hac habitasse platea dictumst quisque. Nunc congue nisi vitae suscipit tellus mauris a diam. Sit amet justo donec enim."
+const content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt vitae semper quis lectus nulla at volutpat diam ut. Eget velit aliquet sagittis id consectetur purus. Leo in vitae turpis massa sed elementum tempus egestas. In metus vulputate eu scelerisque felis imperdiet. Dis parturient montes nascetur ridiculus mus mauris vitae. Tincidunt tortor aliquam nulla facilisi cras fermentum odio. Eget nunc scelerisque viverra mauris in aliquam sem fringilla ut. Suspendisse ultrices gravida dictum fusce ut placerat orci nulla. Quis blandit turpis cursus in hac habitasse platea dictumst quisque. Nunc congue nisi vitae suscipit tellus mauris a diam. Sit amet justo donec enim."
 
 app.set('view engine', 'ejs');
 
@@ -35,28 +35,19 @@ const item1 = new ToDoItem({
 const item2 = new ToDoItem({
   activity: "What is your main focus today?"
 });
-const defaultItems = [item1,item2];
+const defaultItems = [item1, item2];
 
 const customlstSchema = new mongoose.Schema({
-  title : String,
-  item:[itemSchema],
-  date:{
+  title: String,
+  items: [itemSchema],
+  date: {
     type: Date,
     default: Date.now()
   }
-
 });
 // itemSchema.path('date').index({expires:});
-const CustomList = mongoose.model("CustomList",customlstSchema);
+const CustomList = mongoose.model("CustomList", customlstSchema);
 
-// const helpContSchema = new mongoose.Schema({
-//   content:String
-// });
-//
-// const Help = mongoose.model("Help", helpContSchema);
-//
-// const help = new Help({
-  // });
 
 const date = new Date();
 let options = {
@@ -66,53 +57,31 @@ let options = {
 };
 const today = date.toLocaleDateString("en-US", options);
 
-app.get("/", function(req,res){
-  ToDoItem.find({}, function(err, foundItems){
-    if(!err){
-      if(foundItems.length===0){
-        ToDoItem.insertMany(defaultItems, function(err){
-          if(!err){
-            console.log("successfully inserted default documents")
+app.get("/",function(req, res) {
+  ToDoItem.find({}, function(err, itemsFound) {
+    if (!err) {
+      if (itemsFound.length !== 0) {
+        res.render("index", {
+          currentDay: today,
+          listTitle: "todo",
+          presentItems: itemsFound
+        });
+      } else {
+        ToDoItem.insertMany(defaultItems, function(err) {
+          if (!err) {
+            console.log("item inserted to db's todoitems collection");
+          }else{
+            console.log(err.message);
           }
         });
         res.redirect("/");
-      }else{
-        res.render("index",{
-          listTitle:"todo",
-          currentDay: today,
-          presentItems:foundItems
-        });
       }
+    }else{
+      console.log(err.message);
     }
   });
 });
 
-app.get("/category/:customListname", function(req,res){
-  const customListname = _.capitalize(req.params.customListname);
-  CustomList.findOne({name: customListname}, function(err,result){
-    if(!err){
-      if(!result){
-        const defaultcustList = new CustomList({
-          title: customListname,
-          item: defaultItems
-        });
-        defaultcustList.save();
-        res.redirect("/category/"+customListname);
-      }else{
-        res.render("index",{
-          listTitle:result.title,
-          currentDay: today,
-          presentItems:result.item
-        });
-      }
-    }
-  });
-});
-
-app.get("/help", function(req, res) {
-
-  res.render("help",{helpContent:content});
-});
 
 
 app.post("/", function(req, res) {
@@ -122,37 +91,75 @@ app.post("/", function(req, res) {
     activity: newActivity
   });
 
-if(listName === "todo"){
-  nextActivity.save();
-  console.log("item saved to db");
-  res.redirect("/");
-}else{
-  CustomList.findOne({title:listName}, function(err, foundList){
-    foundList.item.push(nextActivity);
-    foundList.save();
-    res.redirect("/category/"+listName);
-  });
-}
-
-
-
-
+  if (listName === "todo") {
+    nextActivity.save();
+    console.log("item saved to db");
+    res.redirect("/");
+  } else {
+    CustomList.findOne({
+      title: listName
+    }, function(err, foundList) {
+      foundList.items.push(nextActivity);
+      foundList.save();
+      res.redirect("/category/" + listName);
+    });
+  }
 });
+
+app.get("/category/:customListname", function(req, res) {
+  const custLstname = _.capitalize(req.params.customListname);
+  CustomList.findOne({
+    title: custLstname
+  }, function(err, result) {
+    if (!err) {
+      if (!result) {
+        const defaultcustList = new CustomList({
+          title: custLstname,
+          items: defaultItems
+        });
+        defaultcustList.save();
+        res.redirect("/category/" + custLstname);
+      } else {
+        res.render("index", {
+          listTitle: result.title,
+          currentDay: today,
+          presentItems: result.items
+        });
+      }
+    }
+  });
+});
+
+app.get("/help", function(req, res) {
+
+  res.render("help");
+});
+
+
+
 
 app.post("/delete", function(req, res) {
   const idofChecked = req.body.check;
-  const listName = req.body.custlistName;
-  if(listName==="Today"){
+  const lstTitle = req.body.custlistTitle;
+  if (lstTitle === "todo") {
     ToDoItem.findByIdAndRemove(idofChecked, function(err) {
       if (!err) {
         console.log("successfully deleted checked item");
         res.redirect("/");
       }
     });
-  }else{
-    CustomList.findOneAndUpdate({title:listName},{$pull:{item:{_id:idofChecked}}}, function(err, foundList){
-      if(!err){
-        res.redirect("/category/"+listName);
+  } else {
+    CustomList.findOneAndUpdate({
+      title: lstTitle
+    }, {
+      $pull: {
+        items: {
+          _id: idofChecked
+        }
+      }
+    }, function(err, foundList) {
+      if (!err) {
+        res.redirect("/category/" + lstTitle);
       }
     });
   }
@@ -161,7 +168,7 @@ app.post("/delete", function(req, res) {
 });
 
 
-app.listen(process.env.PORT || 3000, function() {
+app.listen(3000 || process.env.PORT, function() {
   console.log("server has started");
 });
 
