@@ -77,31 +77,6 @@ app.get("/",function(req, res) {
   });
 });
 
-
-//       if (itemsFound.length === 0) {
-//         res.render("index", {
-//           currentDay: today,
-//           listTitle: "todo",
-//           presentItems: itemsFound
-//         });
-//       } else {
-//         ToDoItem.insertMany(defaultItems, function(err) {
-//           if (!err) {
-//             console.log("item inserted to db's todoitems collection");
-//           }else{
-//             console.log(err.message);
-//           }
-//         });
-//         res.redirect("/");
-//       }
-//     }else{
-//       console.log(err.message);
-//     }
-//   });
-// });
-//
-
-
 app.post("/", function(req, res) {
   const newActivity = req.body.newItem;
   const listName = req.body.list;
